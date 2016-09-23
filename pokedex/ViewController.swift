@@ -37,7 +37,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,
         let path = Bundle.main.path(forResource: "music", ofType: "mp3")!
         
         do{
-            musicPlayer = try AVAudioPlayer(contentsOf: NSURL(string: path)! as URL)
+            musicPlayer = try AVAudioPlayer(contentsOf: URL(string: path)! as URL)
             musicPlayer.prepareToPlay()
             musicPlayer.numberOfLoops = -1
             musicPlayer.play()
@@ -65,29 +65,42 @@ class ViewController: UIViewController, UICollectionViewDelegate,
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PokeCell", for: indexPath) as? PokeCell{
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath)
+                        -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
+                      "PokeCell", for: indexPath) as? PokeCell{
             
-            //let poke = pokemon[indexPath.row]
-            let poke: Pokeman!
-            if isInSearchMode{
-                poke = filterPokemon[indexPath.row]
-            }else{
-                poke = pokemon[indexPath.row]
-            }
-            cell.configureCell(pokemon: poke)
+                      //let poke = pokemon[indexPath.row]
+                      let poke: Pokeman!
+                        if isInSearchMode{
+                            poke = filterPokemon[indexPath.row]
+                        }else{
+                            poke = pokemon[indexPath.row]
+                        }
+                        cell.configureCell(poke)
             
-            return cell
+                        return cell
         }else{
             return UICollectionViewCell()
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         
+        let poke: Pokeman!
+        if isInSearchMode{
+            poke = filterPokemon[indexPath.row]
+        }else{
+            poke = pokemon[indexPath.row]
+        }
+        
+        performSegue(withIdentifier: "pokemonDetailVC", sender: poke)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         if isInSearchMode{
             return filterPokemon.count
         }
@@ -98,7 +111,9 @@ class ViewController: UIViewController, UICollectionViewDelegate,
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return CGSize(width: 105, height: 105)
         
@@ -129,6 +144,16 @@ class ViewController: UIViewController, UICollectionViewDelegate,
         }else{
             musicPlayer.play()
             sender.alpha = 1.0
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "pokemonDetailVC"{
+            if let detailVc = segue.destination as? PokemonDetailVC{
+                if let poke = sender as? Pokeman{
+                    detailVc.pokemon = poke
+                }
+            }
         }
     }
 }

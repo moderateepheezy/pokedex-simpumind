@@ -21,7 +21,7 @@ class PokeCell: UICollectionViewCell {
         layer.cornerRadius = 5.0
     }
     
-    func configureCell(pokemon: Pokeman){
+    func configureCell(_ pokemon: Pokeman){
         self.pokemon = pokemon
         
         nameLbl.text = self.pokemon.name.capitalized

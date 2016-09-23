@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class CSV {
-    public var headers: [String] = []
-    public var rows: [Dictionary<String, String>] = []
-    public var columns = Dictionary<String, [String]>()
+open class CSV {
+    open var headers: [String] = []
+    open var rows: [Dictionary<String, String>] = []
+    open var columns = Dictionary<String, [String]>()
     var delimiter = CharacterSet(charactersIn: ",")
     
     public init(content: String?, delimiter: CharacterSet, encoding: UInt) throws{
